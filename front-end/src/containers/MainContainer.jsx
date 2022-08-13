@@ -4,15 +4,16 @@ import { Link } from "react-router-dom";
 const MainContainerForm = styled.div`
   width: 100%;
   height: 100%;
-  /* background-color: crimson; */
+
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 const Intro = styled.div`
   width: 70%;
-  height: 900px;
+  height: 950px;
   background-color: aliceblue;
+  border-radius: 10px;
 
   & h1 {
     display: inline-block;
@@ -76,6 +77,7 @@ function MainContainer(props) {
             <li>Spring JPA</li>
             <li>Spring QueryDSL</li>
             <li>Spring Security</li>
+            <li>MariaDB</li>
           </ul>
         </DetailIntro>
         <hr />
@@ -89,6 +91,7 @@ function MainContainer(props) {
             <li>redux-saga</li>
             <li>styled-component</li>
             <li>material-ui</li>
+            <li>HTML5 / CSS</li>
           </ul>
         </DetailIntro>
         <hr />
@@ -97,7 +100,8 @@ function MainContainer(props) {
           <h3>사용 기술</h3>
           <ul>
             <li>git</li>
-            <li>docker</li>
+            <li>Docker</li>
+            <li>docker-compose</li>
           </ul>
         </DetailIntro>
       </Intro>

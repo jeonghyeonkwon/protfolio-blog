@@ -31,7 +31,7 @@ function MenuComponent({ title, path, width }) {
   return (
     <MenuComponentForm width={width}>
       <Menu>
-        <Link>{title}</Link>
+        <Link to={path}>{title}</Link>
       </Menu>
     </MenuComponentForm>
   );

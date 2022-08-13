@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Button } from "@mui/material";
 import MenuComponent from "../components/MenuComponent";
+import { Link } from "react-router-dom";
 const HeaderContainersForm = styled.div`
   margin: 0;
   width: 100%;
@@ -48,13 +49,15 @@ const AuthForm = styled.div`
 `;
 function HeaderContainers(props) {
   const [menu, setMenu] = useState([
-    { menuTitle: "이력서", path: "/" },
-    { menuTitle: "게시판", path: "/" },
+    { menuTitle: "About Me", path: "/resume" },
+    { menuTitle: "게시판", path: "/board" },
   ]);
   return (
     <HeaderContainersForm>
       <MainTitleForm>
-        <MainTitle>Portfolio-Blog</MainTitle>
+        <Link to="/">
+          <MainTitle>Portfolio-Blog</MainTitle>
+        </Link>
       </MainTitleForm>
       <MenuForm>
         {menu.map((data) => (
