@@ -26,7 +26,7 @@ const MainTitle = styled.div`
   align-items: center;
   justify-content: center;
   &:hover {
-    color: black;
+    color: #0c4f8a;
     transition: 0.6s;
   }
 `;

@@ -1,9 +1,14 @@
 import React from "react";
-import HeaderContainer from "../containers/HeaderContainers";
+import BodyFrame from "../containers/BodyFrame";
+import HeaderContainer from "../containers/HeaderContainer";
+import MainContainer from "../containers/MainContainer";
 function MainPage(props) {
   return (
     <>
-      <HeaderContainer></HeaderContainer>
+      <HeaderContainer />
+      <BodyFrame>
+        <MainContainer />
+      </BodyFrame>
     </>
   );
 }
