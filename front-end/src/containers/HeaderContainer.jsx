@@ -45,7 +45,7 @@ const AuthForm = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  & > button {
+  & > a {
     margin: 20px;
   }
 `;
@@ -71,12 +71,16 @@ function HeaderContainer(props) {
         ))}
       </MenuForm>
       <AuthForm>
-        <Button variant="contained" size="large">
-          로그인
-        </Button>
-        <Button variant="contained" color="success" size="large">
-          회원 가입
-        </Button>
+        <Link to="/login">
+          <Button variant="contained" size="large">
+            로그인
+          </Button>
+        </Link>
+        <Link to="/register">
+          <Button variant="contained" color="success" size="large">
+            회원 가입
+          </Button>
+        </Link>
       </AuthForm>
     </HeaderContainersForm>
   );

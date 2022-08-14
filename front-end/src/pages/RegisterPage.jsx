@@ -5,7 +5,9 @@ import PageFrame from "./PageFrame";
 function RegisterPage(props) {
   return (
     <>
-      <PageFrame></PageFrame>
+      <PageFrame>
+        <RegisterPage></RegisterPage>
+      </PageFrame>
     </>
   );
 }
