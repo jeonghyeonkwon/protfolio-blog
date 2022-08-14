@@ -6,10 +6,12 @@ import { Link } from "react-router-dom";
 const HeaderContainersForm = styled.div`
   margin: 0;
   width: 100%;
-  background: linear-gradient(to bottom right, #403b4a, #e7e9bb);
+  background: #fff;
   border-radius: 0 0 5px 5px;
   height: 100px;
   display: flex;
+  border-bottom: 1px solid #000;
+  box-shadow: 0 3px 15px #525252;
 `;
 const MainTitleForm = styled.div`
   cursor: pointer;
@@ -22,7 +24,7 @@ const MainTitle = styled.div`
   height: 100%;
   font-weight: bold;
 
-  color: #1a2980;
+  color: #000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,10 +49,10 @@ const AuthForm = styled.div`
     margin: 20px;
   }
 `;
-function HeaderContainers(props) {
+function HeaderContainer(props) {
   const [menu, setMenu] = useState([
-    { menuTitle: "자기 소개", path: "/resume" },
-    { menuTitle: "게시판", path: "/board" },
+    { menuTitle: "Resume", path: "/resume" },
+    { menuTitle: "Board", path: "/board" },
   ]);
   return (
     <HeaderContainersForm>
@@ -80,4 +82,4 @@ function HeaderContainers(props) {
   );
 }
 
-export default HeaderContainers;
+export default HeaderContainer;

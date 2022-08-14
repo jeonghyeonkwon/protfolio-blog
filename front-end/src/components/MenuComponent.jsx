@@ -20,10 +20,10 @@ const Menu = styled.div`
   height: 100%;
 
   & a {
-    color: #2b5876;
+    color: #000;
     transition: 0.6s;
     &:hover {
-      color: #4e4376;
+      color: gray;
     }
   }
 `;

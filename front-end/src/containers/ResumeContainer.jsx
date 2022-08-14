@@ -8,16 +8,20 @@ const ResumeContainerForm = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 50px;
+  width: 75%;
+  /* padding: 50px; */
 `;
 const Resume = styled.div`
-  width: 80%;
+  width: 100%;
   border: 1px solid #000;
   border-radius: 5px;
   padding: 20px;
   background-color: #fff;
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.7);
   & > div {
     margin-bottom: 20px;
+    /* background-color: dodgerblue; */
+    padding: 15px;
   }
 
   & hr {

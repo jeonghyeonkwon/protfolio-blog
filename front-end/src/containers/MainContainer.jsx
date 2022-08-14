@@ -2,17 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 const MainContainerForm = styled.div`
-  width: 100%;
+  width: 70%;
   height: 100%;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid black;
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.7);
 `;
 const Intro = styled.div`
-  width: 70%;
+  /* width: 70%; */
   height: 950px;
-  background-color: aliceblue;
+  background-color: #fff;
   border-radius: 10px;
 
   & h1 {
@@ -34,10 +36,10 @@ const Intro = styled.div`
   }
 
   & a {
-    color: dodgerblue;
+    color: gray;
     transition: 0.6s;
     &:hover {
-      color: #0e0c8a;
+      color: dodgerblue;
     }
   }
 `;
@@ -45,7 +47,7 @@ const SimpleIntro = styled.div`
   margin-bottom: 10px;
 `;
 const DetailIntro = styled.div`
-  background-color: #eee;
+  background-color: #fff;
   margin-bottom: 10px;
 `;
 function MainContainer(props) {
