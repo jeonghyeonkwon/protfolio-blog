@@ -5,7 +5,6 @@ import PageFrame from "./PageFrame";
 function BoardDetailPage(props) {
   return (
     <PageFrame>
-      디테일
       <BoardDetailContainer></BoardDetailContainer>
     </PageFrame>
   );
