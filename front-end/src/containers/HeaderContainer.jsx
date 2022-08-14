@@ -49,7 +49,7 @@ const AuthForm = styled.div`
 `;
 function HeaderContainers(props) {
   const [menu, setMenu] = useState([
-    { menuTitle: "About Me", path: "/resume" },
+    { menuTitle: "자기 소개", path: "/resume" },
     { menuTitle: "게시판", path: "/board" },
   ]);
   return (
