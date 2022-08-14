@@ -1,11 +1,78 @@
 import React from "react";
 import styled from "styled-components";
+import { TextField, Button } from "@mui/material";
 const RegisterContainerForm = styled.div`
   width: 100%;
   height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center; ;
+`;
+const RegisterForm = styled.div`
+  width: 30%;
+  height: 400px;
+  padding: 20px;
+  border: 2px solid gray;
+  border-radius: 16px;
+
+  & h1 {
+    margin-bottom: 10px;
+  }
+  & em {
+    color: gray;
+  }
+`;
+
+const FieldForm = styled.div``;
+const ErrorMsg = styled.div`
+  width: 100%;
+  height: 25px;
+  display: block;
+  color: crimson;
+  margin: 0px 10px;
+`;
+const BtnForm = styled.div`
+  & button {
+    margin-bottom: 20px;
+  }
 `;
 function RegisterContainer(props) {
-  return <RegisterContainerForm></RegisterContainerForm>;
+  return (
+    <RegisterContainerForm>
+      <RegisterForm>
+        <h1>회원가입</h1>
+        <em>간단한 내용으로 가입해 주세요 (아이디:abc, 비밀번호:1234)</em>
+
+        <FieldForm>
+          <TextField
+            label="아이디"
+            variant="outlined"
+            fullWidth
+            margin="dense"
+          />
+          <ErrorMsg></ErrorMsg>
+
+          <TextField
+            label="비밀번호"
+            variant="outlined"
+            fullWidth
+            margin="dense"
+          />
+          <ErrorMsg></ErrorMsg>
+        </FieldForm>
+        <BtnForm>
+          <Button variant="outlined" fullWidth>
+            회원 가입 하기
+          </Button>
+          <a href="/login">
+            <Button variant="outlined" color="error" fullWidth>
+              취소하기
+            </Button>
+          </a>
+        </BtnForm>
+      </RegisterForm>
+    </RegisterContainerForm>
+  );
 }
 
 export default RegisterContainer;

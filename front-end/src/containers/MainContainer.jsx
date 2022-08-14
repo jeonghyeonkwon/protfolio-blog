@@ -10,12 +10,12 @@ const MainContainerForm = styled.div`
   align-items: center;
   border: 1px solid black;
   box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
 `;
 const Intro = styled.div`
   /* width: 70%; */
-  height: 950px;
+  /* height: 950px; */
   background-color: #fff;
-  border-radius: 10px;
 
   & h1 {
     display: inline-block;
@@ -62,9 +62,9 @@ function MainContainer(props) {
           </p>
           <p>
             회원 가입 로그인은 가능하지만 예시를 보여드리기 위한 목적이므로
-            아이디 비밀번호는 한번도 사용한 적 없는 간단한 것으로 만들어주세요
-            (ex 아이디 : abc 비밀번호 : 1234)
+            아이디 비밀번호는 한번도 사용한 적 없는 간단한 것으로 만들어 주세요
           </p>
+          <p>(ex 아이디 : abc 비밀번호 : 1234)</p>
           <p>
             해당 사이트에 대한 코드는 &nbsp;
             <a href="https://github.com/jeonghyeonkwon">여기 클릭!</a>

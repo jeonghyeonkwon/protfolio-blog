@@ -52,9 +52,11 @@ function LoginContainer(props) {
           <Button variant="outlined" fullWidth>
             로그인 하기
           </Button>
-          <Button variant="outlined" color="success" fullWidth>
-            회원가입
-          </Button>
+          <a href="/register">
+            <Button variant="outlined" color="success" fullWidth>
+              회원가입
+            </Button>
+          </a>
         </BtnForm>
       </LoginForm>
     </LoginContainerForm>

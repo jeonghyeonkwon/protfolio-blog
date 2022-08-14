@@ -1,4 +1,5 @@
 import React from "react";
+import RegisterContainer from "../containers/RegisterContainer";
 
 import PageFrame from "./PageFrame";
 
@@ -6,7 +7,7 @@ function RegisterPage(props) {
   return (
     <>
       <PageFrame>
-        <RegisterPage></RegisterPage>
+        <RegisterContainer></RegisterContainer>
       </PageFrame>
     </>
   );
