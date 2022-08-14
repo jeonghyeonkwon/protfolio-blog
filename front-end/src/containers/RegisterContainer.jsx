@@ -10,7 +10,7 @@ const RegisterContainerForm = styled.div`
 `;
 const RegisterForm = styled.div`
   width: 30%;
-  height: 400px;
+  height: 440px;
   padding: 20px;
   border: 2px solid gray;
   border-radius: 16px;
@@ -23,7 +23,19 @@ const RegisterForm = styled.div`
   }
 `;
 
-const FieldForm = styled.div``;
+const FieldForm = styled.div`
+  margin-top: 20px;
+`;
+const IdForm = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & button {
+    margin-left: 5px;
+    width: 30%;
+    height: 54px;
+  }
+`;
 const ErrorMsg = styled.div`
   width: 100%;
   height: 25px;
@@ -44,14 +56,18 @@ function RegisterContainer(props) {
         <em>간단한 내용으로 가입해 주세요 (아이디:abc, 비밀번호:1234)</em>
 
         <FieldForm>
-          <TextField
-            label="아이디"
-            variant="outlined"
-            fullWidth
-            margin="dense"
-          />
+          <IdForm>
+            <TextField
+              label="아이디"
+              variant="outlined"
+              margin="dense"
+              fullWidth
+            />
+            <Button variant="outlined" size="small">
+              중복 확인
+            </Button>
+          </IdForm>
           <ErrorMsg></ErrorMsg>
-
           <TextField
             label="비밀번호"
             variant="outlined"
