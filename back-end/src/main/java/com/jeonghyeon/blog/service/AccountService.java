@@ -1,40 +1,39 @@
 package com.jeonghyeon.blog.service;
 
-import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import com.jeonghyeon.blog.dto.AccountRequest;
+import com.jeonghyeon.blog.entity.Account;
+import com.jeonghyeon.blog.repository.AccountRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
+import java.util.Optional;
+import java.util.UUID;
 
+@Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Component
+@Slf4j
 public class AccountService {
-    private final InitService initService;
+    private final AccountRepository accountRepository;
 
-    @PostConstruct
-    public void init(){
-        initService.createAdmin();
-    }
-
-
-    @Component
     @Transactional
-    @RequiredArgsConstructor
-    static class InitService{
-        private final EntityManager em;
+    public ResponseEntity regitser(AccountRequest dto) {
+        String userId = dto.getUserId();
+        Optional<Account> opAccount = accountRepository.findByUserId(userId);
+        if(opAccount.isPresent()){
+            throw new IllegalStateException("이미 사용하는 아이디를 가진 회원이 있습니다");
+        }
 
-        @Value("${account.admin.adminId}")
-        private String adminId;
-
-        @Value("${account.admin.adminPw}")
-        private String adminPw;
-
-        public void createAdmin(){}
+        // 시큐리티 적용후 비밀번호 인코딩 예정
+        Account account = new Account(UUID.randomUUID().toString(),dto.getUserId(),"1234");
+        Account savedAccount = accountRepository.save(account);
+        return new ResponseEntity(savedAccount,HttpStatus.CREATED);
     }
-
 
 
 }
