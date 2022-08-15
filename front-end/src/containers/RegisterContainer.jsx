@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@mui/material";
+import { useSelector } from "react-redux";
 const RegisterContainerForm = styled.div`
   width: 100%;
   height: 700px;
@@ -49,6 +50,11 @@ const BtnForm = styled.div`
   }
 `;
 function RegisterContainer(props) {
+  const { userId, userPassword, errorMsg } = useSelector(({ user }) => ({
+    userId: user.register.userId,
+    userPassword: user.register.userPassword,
+    errorMsg: user.register.error,
+  }));
   return (
     <RegisterContainerForm>
       <RegisterForm>
@@ -67,14 +73,14 @@ function RegisterContainer(props) {
               중복 확인
             </Button>
           </IdForm>
-          <ErrorMsg></ErrorMsg>
+          <ErrorMsg>{errorMsg.userId}</ErrorMsg>
           <TextField
             label="비밀번호"
             variant="outlined"
             fullWidth
             margin="dense"
           />
-          <ErrorMsg></ErrorMsg>
+          <ErrorMsg>{errorMsg.userPassword}</ErrorMsg>
         </FieldForm>
         <BtnForm>
           <Button variant="outlined" fullWidth>
