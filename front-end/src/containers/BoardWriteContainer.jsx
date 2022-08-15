@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Button, TextField } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { changeField } from "../modules/board";
 const BoardWriteForm = styled.div`
   width: 50%;
   /* background-color: #eee; */
@@ -18,10 +20,34 @@ const ButtonForm = styled.div`
   }
 `;
 function BoardWriteContainer(props) {
+  const { title, content, error } = useSelector(({ board }) => ({
+    title: board.write.title,
+    content: board.write.content,
+    error: board.write.error,
+  }));
+  const dispatch = useDispatch();
+  const onChangeField = (e) => {
+    const { name, value } = e.target;
+
+    dispatch(
+      changeField({
+        key: name,
+        value,
+      })
+    );
+  };
   return (
     <BoardWriteForm>
       <h1>글쓰기</h1>
-      <TextField label="제목" variant="outlined" fullWidth margin="normal" />
+      <TextField
+        label="제목"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={title}
+        onChange={onChangeField}
+        name="title"
+      />
       <TextField
         label="제목"
         variant="outlined"
@@ -29,6 +55,9 @@ function BoardWriteContainer(props) {
         margin="normal"
         multiline
         rows={8}
+        value={content}
+        onChange={onChangeField}
+        name="content"
       />
       <ButtonForm>
         <Button variant="contained" fullWidth>

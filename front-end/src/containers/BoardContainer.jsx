@@ -9,6 +9,7 @@ import {
   TableRow,
   Paper,
   Pagination,
+  Button,
 } from "@mui/material";
 import styled from "styled-components";
 
@@ -39,6 +40,11 @@ const BoardTitle = styled.div`
     color: gray;
   }
   /* padding: 10px; */
+`;
+const BoardWriteBtn = styled.div`
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: right;
 `;
 const PaginationForm = styled.div`
   /* background-color: crimson; */
@@ -109,6 +115,9 @@ function BoardContainer(props) {
           삭제됩니다.
         </em>
       </BoardTitle>
+      <BoardWriteBtn>
+        <Button variant="contained">글쓰기</Button>
+      </BoardWriteBtn>
       <TableContainer component={Paper}>
         <Table sx={{}}>
           <TableHead>
