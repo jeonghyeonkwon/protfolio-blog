@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { changeField } from "../modules/user";
 const RegisterContainerForm = styled.div`
   width: 100%;
   height: 700px;
@@ -55,6 +56,17 @@ function RegisterContainer(props) {
     userPassword: user.register.userPassword,
     errorMsg: user.register.error,
   }));
+  const dispatch = useDispatch();
+  const onChangeField = (e) => {
+    const { name, value } = e.target;
+    dispatch(
+      changeField({
+        type: "register",
+        key: name,
+        value,
+      })
+    );
+  };
   return (
     <RegisterContainerForm>
       <RegisterForm>
@@ -68,6 +80,9 @@ function RegisterContainer(props) {
               variant="outlined"
               margin="dense"
               fullWidth
+              value={userId}
+              name="userId"
+              onChange={onChangeField}
             />
             <Button variant="outlined" size="small">
               중복 확인
@@ -79,6 +94,9 @@ function RegisterContainer(props) {
             variant="outlined"
             fullWidth
             margin="dense"
+            value={userPassword}
+            name="userPassword"
+            onChange={onChangeField}
           />
           <ErrorMsg>{errorMsg.userPassword}</ErrorMsg>
         </FieldForm>

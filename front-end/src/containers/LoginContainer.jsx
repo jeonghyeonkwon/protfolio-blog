@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Button, TextField } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { changeField } from "../modules/user";
 const LoginContainerForm = styled.div`
   width: 100%;
   height: 700px;
@@ -30,6 +32,27 @@ const BtnForm = styled.div`
   }
 `;
 function LoginContainer(props) {
+  const { userId, userPassword, error } = useSelector(({ user }) => ({
+    userId: user.login.userId,
+    userPassword: user.login.userPassword,
+    error: user.login.error,
+  }));
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (error) {
+      alert(alert);
+    }
+  }, [error]);
+  const onChangeField = (e) => {
+    const { name, value } = e.target;
+    dispatch(
+      changeField({
+        type: "login",
+        key: name,
+        value,
+      })
+    );
+  };
   return (
     <LoginContainerForm>
       <LoginForm>
@@ -40,12 +63,16 @@ function LoginContainer(props) {
             variant="outlined"
             fullWidth
             margin="normal"
+            value={userId}
+            onChange={onChangeField}
           />
           <TextField
             label="비밀번호"
             variant="outlined"
             fullWidth
             margin="normal"
+            value={userPassword}
+            onChange={onChangeField}
           />
         </FieldForm>
         <BtnForm>
