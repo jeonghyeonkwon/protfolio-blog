@@ -6,6 +6,7 @@ import com.jeonghyeon.blog.entity.Account;
 import com.jeonghyeon.blog.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Slf4j
 public class AccountService {
     private final AccountRepository accountRepository;
-
+    private final PasswordEncoder passwordEncoder;
     public boolean validateUserId(String userId) {
         validateUser(accountRepository, userId);
         return true;
@@ -29,9 +30,7 @@ public class AccountService {
     public Long regitser(AccountRequest dto) {
         String userId = dto.getUserId();
         validateUser(accountRepository, userId);
-
-        // 시큐리티 적용후 비밀번호 인코딩 예정
-        Account account = new Account(UUID.randomUUID().toString(),dto.getUserId(),"1234");
+        Account account = new Account(UUID.randomUUID().toString(),dto.getUserId(),passwordEncoder.encode(dto.getUserPassword()));
         Account savedAccount = accountRepository.save(account);
         return savedAccount.getId();
 

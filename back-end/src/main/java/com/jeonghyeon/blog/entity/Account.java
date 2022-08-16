@@ -37,4 +37,10 @@ public class Account extends BaseTimeEntity{
         this.accountRole = AccountRole.BASIC;
     }
 
+    public Account(String uuid, String adminId, String adminPassword, AccountRole admin) {
+        this.uuid = uuid;
+        this.userId = adminId;
+        this.userPassword = adminPassword;
+        this.accountRole = AccountRole.ADMIN;
+    }
 }
