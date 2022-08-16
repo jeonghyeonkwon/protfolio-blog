@@ -1,0 +1,29 @@
+package com.jeonghyeon.blog.security.auth;
+
+import com.jeonghyeon.blog.entity.Account;
+import com.jeonghyeon.blog.repository.AccountRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@Slf4j
+public class PrincipalDetailsService implements UserDetailsService {
+
+    @Autowired
+    private AccountRepository accountRepository;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Account> opAccount = accountRepository.findByUserId(username);
+        if(!opAccount.isPresent()){
+            throw new UsernameNotFoundException("아이디가 존재하지 않습니다.");
+        }
+        return new PrincipalDetails(opAccount.get());
+    }
+}
