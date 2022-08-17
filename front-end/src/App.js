@@ -8,6 +8,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import BoardWritePage from "./pages/BoardWritePage";
 import BoardDetailPage from "./pages/BoardDetailPage";
+import { useDispatch } from "react-redux";
+import { tokenCheck } from "./modules/auth";
 const AppForm = styled.div`
   width: 100%;
   /* height: 1200px; */
@@ -18,6 +20,14 @@ const AppForm = styled.div`
   /* justify-content: center; */
 `;
 function App() {
+  const dispatch = useDispatch();
+  try {
+    const token = localStorage.getItem("token");
+
+    dispatch(tokenCheck(token));
+  } catch (e) {
+    console.log("localstorage가 작동하지 않습니다.");
+  }
   return (
     <AppForm>
       <Route path={["", "/"]} exact component={MainPage} />

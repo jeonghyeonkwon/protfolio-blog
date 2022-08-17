@@ -8,7 +8,7 @@ import {
   registerUser,
   validateChange,
   validateUser,
-} from "../modules/user";
+} from "../modules/register";
 import { useHistory } from "react-router-dom";
 const RegisterContainerForm = styled.div`
   width: 100%;
@@ -59,13 +59,13 @@ const BtnForm = styled.div`
 `;
 function RegisterContainer(props) {
   const { userId, userPassword, validate, success, errorMsg, validateMsg } =
-    useSelector(({ user }) => ({
-      userId: user.register.userId,
-      userPassword: user.register.userPassword,
-      errorMsg: user.register.error,
-      validate: user.register.validate,
-      success: user.register.success,
-      validateMsg: user.register.validateMsg,
+    useSelector(({ register }) => ({
+      userId: register.register.userId,
+      userPassword: register.register.userPassword,
+      errorMsg: register.register.error,
+      validate: register.register.validate,
+      success: register.register.success,
+      validateMsg: register.register.validateMsg,
     }));
   const dispatch = useDispatch();
   const history = useHistory();

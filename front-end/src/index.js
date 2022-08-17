@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import rootReducer, { rootSaga } from "./modules";
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -16,7 +16,10 @@ const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
+
+function loadUser() {}
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 sagaMiddleware.run(rootSaga);
 root.render(
   <BrowserRouter>

@@ -9,11 +9,11 @@ import createRequestSaga, {
 import * as userApi from "../lib/api/user";
 import { takeLatest } from "redux-saga/effects";
 
-const INITIALIZE = "user/INITIALIZE";
+const INITIALIZE = "register/INITIALIZE";
 
-const CHANGE_FIELD = "user/CHANGE_FIELD";
+const CHANGE_FIELD = "register/CHANGE_FIELD";
 
-const VALIDATE_CHANGE = "user/VALIDATE_CHANGE";
+const VALIDATE_CHANGE = "register/VALIDATE_CHANGE";
 
 export const validateChange = createAction(VALIDATE_CHANGE);
 
@@ -28,15 +28,10 @@ export const [VALIDATE, VALIDATE_SUCCESS, VALIDATE_FAILURE] =
 export const validateUser = createAction(VALIDATE, (userId) => userId);
 const validateSaga = createRequestSaga(VALIDATE, userApi.validateUserId);
 
-export const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] =
-  createRequestActionTypes("user/LOGIN");
-export const loginUser = createAction(LOGIN, (form) => form);
-const loginSaga = createRequestSaga(LOGIN, userApi.login);
-
 export const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] =
   createRequestActionTypes("user/REGISTER");
 export const registerUser = createAction(REGISTER, (form) => form);
-const registerSaga = createRequestSaga(REGISTER, userApi.register);
+const registerUserSaga = createRequestSaga(REGISTER, userApi.register);
 
 const initialState = {
   register: {
@@ -53,12 +48,6 @@ const initialState = {
       userPassword: "",
     },
   },
-  login: {
-    userId: "",
-    userPassword: "",
-    success: "",
-    error: "",
-  },
 };
 
 export default handleActions(
@@ -66,11 +55,7 @@ export default handleActions(
     [INITIALIZE]: (state) => initialState,
     [CHANGE_FIELD]: (state, { payload: { type, key, value } }) =>
       produce(state, (draft) => {
-        if (type === "login") {
-          draft.login[key] = value;
-        } else {
-          draft.register[key] = value;
-        }
+        draft.register[key] = value;
       }),
     [VALIDATE_CHANGE]: (state, { payload }) =>
       produce(state, (draft) => {
@@ -116,8 +101,7 @@ export default handleActions(
   initialState
 );
 
-export function* userSaga() {
+export function* registerSaga() {
   yield takeLatest(VALIDATE, validateSaga);
-  yield takeLatest(REGISTER, registerSaga);
-  yield takeLatest(LOGIN, loginSaga);
+  yield takeLatest(REGISTER, registerUserSaga);
 }

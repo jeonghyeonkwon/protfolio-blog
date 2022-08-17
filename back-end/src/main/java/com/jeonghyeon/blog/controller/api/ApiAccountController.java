@@ -2,9 +2,11 @@ package com.jeonghyeon.blog.controller.api;
 
 import com.jeonghyeon.blog.dto.AccountRequest;
 import com.jeonghyeon.blog.dto.LoginRequest;
+import com.jeonghyeon.blog.dto.TokenInfoResponse;
 import com.jeonghyeon.blog.exhandler.CustomValidationException;
 import com.jeonghyeon.blog.exhandler.ValidationExceptionDto;
 import com.jeonghyeon.blog.security.jwt.TokenProvider;
+import com.jeonghyeon.blog.security.util.SecurityUtil;
 import com.jeonghyeon.blog.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -29,6 +32,7 @@ public class ApiAccountController {
     private final AccountService accountService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
+
     @GetMapping("/find")
     public ResponseEntity validateUserId(@RequestParam("userId") String userId){
         log.info("userId = {}",userId);
@@ -54,5 +58,14 @@ public class ApiAccountController {
         String jwtToken = tokenProvider.createToken(authentication);
 
         return new ResponseEntity(jwtToken,HttpStatus.OK);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity validate(@RequestHeader("Authorization")String token){
+        Optional<String> opUser = SecurityUtil.getCurrnetAccountId();
+
+        if(!opUser.isPresent()) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        log.info("userID {}",opUser.get());
+        return new ResponseEntity(new TokenInfoResponse(token, opUser.get()),HttpStatus.OK);
     }
 }
