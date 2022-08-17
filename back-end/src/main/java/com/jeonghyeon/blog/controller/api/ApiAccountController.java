@@ -28,7 +28,6 @@ public class ApiAccountController {
         return new ResponseEntity("사용가능한 아이디 입니다", HttpStatus.OK);
     }
 
-
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody AccountRequest dto){
         Long id = accountService.regitser(dto);
@@ -40,8 +39,6 @@ public class ApiAccountController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = tokenProvider.createToken(authentication);
-
-
 
         return new ResponseEntity(jwtToken,HttpStatus.OK);
     }

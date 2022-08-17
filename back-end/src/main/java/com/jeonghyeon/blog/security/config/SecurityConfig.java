@@ -5,9 +5,14 @@ import com.jeonghyeon.blog.security.auth.PrincipalDetails;
 import com.jeonghyeon.blog.security.auth.PrincipalDetailsService;
 import com.jeonghyeon.blog.security.jwt.JwtAccessDeniedHandler;
 import com.jeonghyeon.blog.security.jwt.JwtAuthenticationEntryPoint;
+import com.jeonghyeon.blog.security.jwt.JwtSecurityConfig;
+import com.jeonghyeon.blog.security.jwt.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,42 +27,53 @@ import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig{
 
-    @Autowired
-    private PrincipalDetailsService principalDetailsService;
-    @Autowired
-    private CorsFilter corsFilter;
 
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
-        return new JwtAccessDeniedHandler();
-    }
-    @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint(){
-        return new JwtAuthenticationEntryPoint();
-    }
+    private final TokenProvider tokenProvider;
+
+    private final PrincipalDetailsService principalDetailsService;
+
+    private final CorsFilter corsFilter;
+
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        return http.authorizeRequests()
-                .mvcMatchers("/**").permitAll()
-                .and()
-                .formLogin().disable()
-                .httpBasic().disable()
-                .userDetailsService(principalDetailsService)
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler())
-                .authenticationEntryPoint(authenticationEntryPoint())
-                .and()
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+        http.csrf().disable();
 
+        http.addFilterBefore(corsFilter,UsernamePasswordAuthenticationFilter.class);
+
+        http.formLogin().disable()
+                        .httpBasic().disable();
+
+        http.authorizeRequests().antMatchers("/api/**").permitAll()
+                .anyRequest().authenticated();
+
+        http.exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler);
+
+        http.userDetailsService(principalDetailsService);
+
+        http.apply(new JwtSecurityConfig(tokenProvider));
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
