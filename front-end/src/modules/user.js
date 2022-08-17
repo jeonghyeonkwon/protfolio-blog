@@ -36,14 +36,17 @@ const loginSaga = createRequestSaga(LOGIN, userApi.login);
 export const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] =
   createRequestActionTypes("user/REGISTER");
 export const registerUser = createAction(REGISTER, (form) => form);
-const registerSaga = createRequestSaga(REGISTER, (form) => form);
+const registerSaga = createRequestSaga(REGISTER, userApi.register);
 
 const initialState = {
   register: {
     validate: false,
     userId: "",
     userPassword: "",
-    success: "",
+    validateMsg: {
+      success: "",
+      error: "",
+    },
     error: {
       serverError: "",
       userId: "",
@@ -76,23 +79,37 @@ export default handleActions(
       }),
     [VALIDATE_SUCCESS]: (state, { payload: success }) =>
       produce(state, (draft) => {
+        draft.register.validateMsg.error = "";
         draft.register.validate = true;
-        draft.register.success = success;
+        draft.register.validateMsg.success = success;
       }),
     [VALIDATE_FAILURE]: (state, { payload: error }) =>
       produce(state, (draft) => {
+        draft.register.validateMsg.success = "";
         draft.register.validate = false;
+        draft.register.validateMsg.error = error.response.data.data;
       }),
     [REGISTER_SUCCESS]: (state, { payload: success }) =>
       produce(state, (draft) => {
-        draft.register.success = success;
+        draft.register.success = "회원가입이 완료되었습니다.";
       }),
     [REGISTER_FAILURE]: (state, { payload: error }) =>
       produce(state, (draft) => {
+        draft.register.error.userId = "";
+        draft.register.error.userPassword = "";
+
         if (error.response.status === 400) {
-          draft.register.error = error.response.data;
+          if (!Array.isArray(error.response.data.data)) {
+            draft.register.error.serverError = error.response.data.data;
+          } else {
+            error.response.data.data.forEach((obj) => {
+              const message = obj.defaultMessage;
+              const fieldName = obj.fieldName;
+              draft.register.error[fieldName] = message;
+            });
+          }
         } else {
-          draft.register.error.serverError = "다른 에러";
+          draft.register.error.serverError = "잠시후 다시 시도해 주세요";
         }
       }),
   },

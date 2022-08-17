@@ -4,10 +4,12 @@ import { TextField, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeField,
+  initialize,
   registerUser,
   validateChange,
   validateUser,
 } from "../modules/user";
+import { useHistory } from "react-router-dom";
 const RegisterContainerForm = styled.div`
   width: 100%;
   height: 700px;
@@ -56,16 +58,17 @@ const BtnForm = styled.div`
   }
 `;
 function RegisterContainer(props) {
-  const { userId, userPassword, validate, success, errorMsg } = useSelector(
-    ({ user }) => ({
+  const { userId, userPassword, validate, success, errorMsg, validateMsg } =
+    useSelector(({ user }) => ({
       userId: user.register.userId,
       userPassword: user.register.userPassword,
       errorMsg: user.register.error,
       validate: user.register.validate,
       success: user.register.success,
-    })
-  );
+      validateMsg: user.register.validateMsg,
+    }));
   const dispatch = useDispatch();
+  const history = useHistory();
   const onChangeField = (e) => {
     const { name, value } = e.target;
     if (name === "userId" && validate) {
@@ -87,6 +90,10 @@ function RegisterContainer(props) {
     dispatch(validateUser(userId));
   };
   const onClickRegister = () => {
+    if (!validate) {
+      alert("중복 체크 후 가입해주세요");
+      return;
+    }
     dispatch(
       registerUser({
         userId: userId,
@@ -98,8 +105,21 @@ function RegisterContainer(props) {
   useEffect(() => {
     if (success) {
       alert(success);
+      history.push("/login");
     }
   }, [success]);
+  useEffect(() => {
+    if (validateMsg.success) {
+      alert(validateMsg.success);
+    }
+    if (validateMsg.error) {
+      alert(validateMsg.error);
+    }
+  }, [validateMsg.success, validateMsg.error]);
+  useEffect(() => {
+    dispatch(initialize());
+    return () => dispatch(initialize());
+  }, []);
   return (
     <RegisterContainerForm>
       <RegisterForm>
