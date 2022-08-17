@@ -24,6 +24,7 @@ public class ApiAccountController {
     private final TokenProvider tokenProvider;
     @GetMapping("/find")
     public ResponseEntity validateUserId(@RequestParam("userId") String userId){
+        log.info("userId = {}",userId);
         accountService.validateUserId(userId);
         return new ResponseEntity("사용가능한 아이디 입니다", HttpStatus.OK);
     }

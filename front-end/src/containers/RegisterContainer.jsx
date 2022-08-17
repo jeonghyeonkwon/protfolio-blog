@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { changeField } from "../modules/user";
+import {
+  changeField,
+  registerUser,
+  validateChange,
+  validateUser,
+} from "../modules/user";
 const RegisterContainerForm = styled.div`
   width: 100%;
   height: 700px;
@@ -38,7 +43,7 @@ const IdForm = styled.div`
     height: 54px;
   }
 `;
-const ErrorMsg = styled.div`
+const Msg = styled.div`
   width: 100%;
   height: 25px;
   display: block;
@@ -51,14 +56,21 @@ const BtnForm = styled.div`
   }
 `;
 function RegisterContainer(props) {
-  const { userId, userPassword, errorMsg } = useSelector(({ user }) => ({
-    userId: user.register.userId,
-    userPassword: user.register.userPassword,
-    errorMsg: user.register.error,
-  }));
+  const { userId, userPassword, validate, success, errorMsg } = useSelector(
+    ({ user }) => ({
+      userId: user.register.userId,
+      userPassword: user.register.userPassword,
+      errorMsg: user.register.error,
+      validate: user.register.validate,
+      success: user.register.success,
+    })
+  );
   const dispatch = useDispatch();
   const onChangeField = (e) => {
     const { name, value } = e.target;
+    if (name === "userId" && validate) {
+      dispatch(validateChange(false));
+    }
     dispatch(
       changeField({
         type: "register",
@@ -67,6 +79,27 @@ function RegisterContainer(props) {
       })
     );
   };
+  const onClickValidate = () => {
+    if (userId === "") {
+      alert("아이디를 입력해 주세요");
+      return;
+    }
+    dispatch(validateUser(userId));
+  };
+  const onClickRegister = () => {
+    dispatch(
+      registerUser({
+        userId: userId,
+        userPassword: userPassword,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (success) {
+      alert(success);
+    }
+  }, [success]);
   return (
     <RegisterContainerForm>
       <RegisterForm>
@@ -84,11 +117,11 @@ function RegisterContainer(props) {
               name="userId"
               onChange={onChangeField}
             />
-            <Button variant="outlined" size="small">
+            <Button variant="outlined" size="small" onClick={onClickValidate}>
               중복 확인
             </Button>
           </IdForm>
-          <ErrorMsg>{errorMsg.userId}</ErrorMsg>
+          <Msg>{errorMsg.userId}</Msg>
           <TextField
             label="비밀번호"
             variant="outlined"
@@ -98,10 +131,10 @@ function RegisterContainer(props) {
             name="userPassword"
             onChange={onChangeField}
           />
-          <ErrorMsg>{errorMsg.userPassword}</ErrorMsg>
+          <Msg>{errorMsg.userPassword}</Msg>
         </FieldForm>
         <BtnForm>
-          <Button variant="outlined" fullWidth>
+          <Button variant="outlined" fullWidth onClick={onClickRegister}>
             회원 가입 하기
           </Button>
           <a href="/login">
