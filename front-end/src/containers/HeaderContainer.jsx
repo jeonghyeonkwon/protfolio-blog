@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Button } from "@mui/material";
 import MenuComponent from "../components/MenuComponent";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { initialize } from "../modules/auth";
 const HeaderContainersForm = styled.div`
   margin: 0;
   width: 100%;
@@ -54,6 +56,21 @@ function HeaderContainer(props) {
     { menuTitle: "Resume", path: "/resume" },
     { menuTitle: "Board", path: "/board" },
   ]);
+
+  const { loginUser } = useSelector(({ auth }) => ({
+    loginUser: auth.auth.userId,
+  }));
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const onClickLogout = () => {
+    try {
+      dispatch(initialize());
+      localStorage.removeItem("token");
+      alert("로그아웃이 완료되었습니다");
+
+      history.push("/login");
+    } catch (e) {}
+  };
   return (
     <HeaderContainersForm>
       <MainTitleForm>
@@ -70,18 +87,35 @@ function HeaderContainer(props) {
           />
         ))}
       </MenuForm>
-      <AuthForm>
-        <Link to="/login">
-          <Button variant="contained" size="large">
-            로그인
+      {loginUser ? (
+        <AuthForm>
+          <Link to="/login">
+            <p>{loginUser}님</p>
+          </Link>
+
+          <Button
+            variant="contained"
+            color="error"
+            size="large"
+            onClick={onClickLogout}
+          >
+            로그아웃
           </Button>
-        </Link>
-        <Link to="/register">
-          <Button variant="contained" color="success" size="large">
-            회원 가입
-          </Button>
-        </Link>
-      </AuthForm>
+        </AuthForm>
+      ) : (
+        <AuthForm>
+          <Link to="/login">
+            <Button variant="contained" size="large">
+              로그인
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button variant="contained" color="success" size="large">
+              회원 가입
+            </Button>
+          </Link>
+        </AuthForm>
+      )}
     </HeaderContainersForm>
   );
 }

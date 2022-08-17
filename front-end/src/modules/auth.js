@@ -72,9 +72,9 @@ export default handleActions(
       }),
     [TOKEN_FAILURE]: (state, { payload: error }) =>
       produce(state, (draft) => {
-        // draft.auth.token = "";
-        // draft.auth.userId = "";
-        // localStorage.removeItem("token");
+        draft.auth.token = "";
+        draft.auth.userId = "";
+        localStorage.removeItem("token");
       }),
   },
   initialState
