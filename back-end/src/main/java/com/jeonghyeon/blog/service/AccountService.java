@@ -38,7 +38,7 @@ public class AccountService {
 
     private void validateUser(AccountRepository accountRepository, String userId) {
         boolean isExistUser =  accountRepository.existUserId(userId);
-        if(!isExistUser){
+        if(isExistUser){
             throw new IllegalStateException("이미 사용하는 아이디를 가진 회원이 있습니다");
         }
     }

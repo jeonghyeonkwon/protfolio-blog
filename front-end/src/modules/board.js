@@ -25,6 +25,11 @@ export const [DETAIL, DETAIL_SUCCESS, DETAIL_FAILURE] =
   createRequestActionTypes("board/DETAIL");
 export const boardDetail = createAction(DETAIL, (uuid) => uuid);
 const boardDetailSaga = createRequestSaga(DETAIL, boardApi.boardDetail);
+
+export const [WRITE, WRITE_SUCCESS, WRITE_FAILURE] =
+  createRequestActionTypes("board/WRITE");
+export const boardWrite = createAction(WRITE, (form) => form);
+const boardWriteSaga = createRequestSaga(WRITE, boardApi.boardWrite);
 const initialState = {
   boardList: {
     isFirst: false,
@@ -55,6 +60,7 @@ const initialState = {
   write: {
     title: "",
     content: "",
+    success: "",
     error: "",
   },
 };
@@ -90,6 +96,14 @@ export default handleActions(
       }),
     [DETAIL_FAILURE]: (state, { payload: error }) =>
       produce(state, (draft) => {}),
+    [WRITE_SUCCESS]: (state, { payload: success }) =>
+      produce(state, (draft) => {
+        draft.write.success = success;
+      }),
+    [WRITE_FAILURE]: (state, { payload: error }) =>
+      produce(state, (draft) => {
+        error.write.error = "에러가 발생했습니다. 다시 시도해 주세요";
+      }),
   },
   initialState
 );
@@ -97,4 +111,5 @@ export default handleActions(
 export function* boardSaga() {
   yield takeLatest(FETCH, fetchBoardSaga);
   yield takeLatest(DETAIL, boardDetailSaga);
+  yield takeLatest(WRITE, boardWriteSaga);
 }

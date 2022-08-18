@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Button, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { changeField } from "../modules/board";
+import { boardWrite, changeField, initialize } from "../modules/board";
+import { Link, useHistory } from "react-router-dom";
 const BoardWriteForm = styled.div`
   width: 50%;
   /* background-color: #eee; */
@@ -20,12 +21,28 @@ const ButtonForm = styled.div`
   }
 `;
 function BoardWriteContainer(props) {
-  const { title, content, error } = useSelector(({ board }) => ({
+  const { title, content, success, error } = useSelector(({ board }) => ({
     title: board.write.title,
     content: board.write.content,
     error: board.write.error,
+    success: board.write.success,
   }));
+  const history = useHistory();
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (success) {
+      alert("게시글 작성을 완료했습니다.");
+      history.push(`/board/detail/${success}`);
+    }
+    if (error) {
+      alert(error);
+      window.location.reload();
+    }
+  }, [success, error]);
+  useEffect(() => {
+    dispatch(initialize());
+    return () => dispatch(initialize());
+  }, []);
   const onChangeField = (e) => {
     const { name, value } = e.target;
 
@@ -33,6 +50,19 @@ function BoardWriteContainer(props) {
       changeField({
         key: name,
         value,
+      })
+    );
+  };
+
+  const onClickWrite = () => {
+    if (title === "" || content === "") {
+      alert("내용을 채워 주세요");
+      return;
+    }
+    dispatch(
+      boardWrite({
+        title,
+        content,
       })
     );
   };
@@ -60,12 +90,14 @@ function BoardWriteContainer(props) {
         name="content"
       />
       <ButtonForm>
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" fullWidth onClick={onClickWrite}>
           작성하기
         </Button>
-        <Button variant="contained" fullWidth color="error">
-          취소하기
-        </Button>
+        <Link to="/board">
+          <Button variant="contained" fullWidth color="error">
+            취소하기
+          </Button>
+        </Link>
       </ButtonForm>
     </BoardWriteForm>
   );

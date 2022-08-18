@@ -43,15 +43,21 @@ function BoardDetailContainer(props) {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const { title, createDate, writer, views, content } = useSelector(
+  const { title, createDate, writer, views, content, error } = useSelector(
     ({ board }) => ({
       title: board.detail.title,
       content: board.detail.content,
       createDate: board.detail.createDate,
       writer: board.detail.writer,
       views: board.detail.views,
+      error: board.detail.error,
     })
   );
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
 
   useEffect(() => {
     dispatch(initialize());

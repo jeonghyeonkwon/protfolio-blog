@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   changeField,
   initialize,
+  messageInitialize,
   registerUser,
   validateChange,
   validateUser,
@@ -87,6 +88,7 @@ function RegisterContainer(props) {
       alert("아이디를 입력해 주세요");
       return;
     }
+    dispatch(messageInitialize());
     dispatch(validateUser(userId));
   };
   const onClickRegister = () => {

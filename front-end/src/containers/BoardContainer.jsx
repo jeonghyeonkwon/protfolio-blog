@@ -115,10 +115,12 @@ function BoardContainer(props) {
         </em>
       </BoardTitle>
       <BoardWriteBtn>
-        <Button variant="contained">글쓰기</Button>
+        <Link to="/board/write">
+          <Button variant="contained">글쓰기</Button>
+        </Link>
       </BoardWriteBtn>
       <TableContainer component={Paper}>
-        <Table sx={{}}>
+        <Table>
           <TableHead>
             <TableRow>
               {columns.map((data) => (

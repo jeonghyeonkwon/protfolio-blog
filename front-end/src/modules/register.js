@@ -15,9 +15,12 @@ const CHANGE_FIELD = "register/CHANGE_FIELD";
 
 const VALIDATE_CHANGE = "register/VALIDATE_CHANGE";
 
+const MSG_INIT = "register/MSG_INIT";
+
 export const validateChange = createAction(VALIDATE_CHANGE);
 
 export const initialize = createAction(INITIALIZE);
+export const messageInitialize = createAction(MSG_INIT);
 export const changeField = createAction(
   CHANGE_FIELD,
   ({ type, key, value }) => ({ type, key, value })
@@ -96,6 +99,11 @@ export default handleActions(
         } else {
           draft.register.error.serverError = "잠시후 다시 시도해 주세요";
         }
+      }),
+    [MSG_INIT]: (state) =>
+      produce(state, (draft) => {
+        draft.register.validateMsg.success = "";
+        draft.register.validateMsg.error = "";
       }),
   },
   initialState
