@@ -23,6 +23,8 @@ const fetchBoardSaga = createRequestSaga(FETCH, boardApi.boardList);
 
 export const [DETAIL, DETAIL_SUCCESS, DETAIL_FAILURE] =
   createRequestActionTypes("board/DETAIL");
+export const boardDetail = createAction(DETAIL, (uuid) => uuid);
+const boardDetailSaga = createRequestSaga(DETAIL, boardApi.boardDetail);
 const initialState = {
   boardList: {
     isFirst: false,
@@ -77,10 +79,22 @@ export default handleActions(
       }),
     [FETCH_FAILURE]: (state, { payload: error }) =>
       produce(state, (draft) => {}),
+    [DETAIL_SUCCESS]: (state, { payload: success }) =>
+      produce(state, (draft) => {
+        draft.detail.uuid = success.uuid;
+        draft.detail.title = success.title;
+        draft.detail.createDate = success.createDate;
+        draft.detail.writer = success.writer;
+        draft.detail.views = success.views;
+        draft.detail.content = success.content;
+      }),
+    [DETAIL_FAILURE]: (state, { payload: error }) =>
+      produce(state, (draft) => {}),
   },
   initialState
 );
 
 export function* boardSaga() {
   yield takeLatest(FETCH, fetchBoardSaga);
+  yield takeLatest(DETAIL, boardDetailSaga);
 }

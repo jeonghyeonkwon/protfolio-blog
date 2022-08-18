@@ -1,6 +1,9 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { boardDetail, initialize } from "../modules/board";
 const BoardDetailForm = styled.div`
   width: 50%;
   height: 700px;
@@ -37,46 +40,50 @@ const BtnForm = styled.div`
   margin: 10px 0px;
 `;
 function BoardDetailContainer(props) {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  const { title, createDate, writer, views, content } = useSelector(
+    ({ board }) => ({
+      title: board.detail.title,
+      content: board.detail.content,
+      createDate: board.detail.createDate,
+      writer: board.detail.writer,
+      views: board.detail.views,
+    })
+  );
+
+  useEffect(() => {
+    dispatch(initialize());
+    dispatch(boardDetail(id));
+    return () => dispatch(initialize());
+  }, []);
   return (
     <BoardDetailForm>
       <BoardTitleForm>
-        <h2>
-          제목입니다.제목입니다.
-          제목입니다.제목입니다.제목입니다.제목입니다.제목입니다.제목입니다.제목입니다.제목입니다.
-        </h2>
+        <h2>{title}</h2>
       </BoardTitleForm>
       <BoardEtcForm>
         <BoardEtcTitle>작성자</BoardEtcTitle>
-        <BoardEtcContent>givejeong2468</BoardEtcContent>
+        <BoardEtcContent>{writer}</BoardEtcContent>
       </BoardEtcForm>
       <BoardEtcForm>
         <BoardEtcTitle>생성일</BoardEtcTitle>
-        <BoardEtcContent>2020.08.02</BoardEtcContent>
+        <BoardEtcContent>{createDate}</BoardEtcContent>
       </BoardEtcForm>
       <BoardEtcForm>
         <BoardEtcTitle>조회수</BoardEtcTitle>
-        <BoardEtcContent>12355534</BoardEtcContent>
+        <BoardEtcContent>{views}</BoardEtcContent>
       </BoardEtcForm>
       <BoardContentForm>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugit
-          perspiciatis itaque aliquid, nam repellendus eaque voluptatum hic
-          facilis dicta minus, laborum magnam tempore omnis, deserunt soluta
-          dolorum numquam fugiat saepe. Natus aliquid, nam sunt consequatur
-          necessitatibus nostrum in sit nulla enim quia odit adipisci
-          aspernatur, libero impedit dolorum aperiam! Nulla id sunt commodi quas
-          minus deserunt voluptatibus exercitationem officia rerum. Illum quasi
-          est blanditiis dignissimos incidunt provident vitae libero earum culpa
-          accusantium esse at sapiente neque corporis ducimus reprehenderit
-          mollitia id, possimus numquam ad laudantium deleniti! Autem eveniet
-          nam dolore expedita repellat magnam voluptatem praesentium commodi,
-          iste officia quas sed.
-        </p>
+        <p>{content}</p>
       </BoardContentForm>
       <BtnForm>
-        <Button variant="contained" fullWidth>
-          목록으로
-        </Button>
+        <Link to="/board">
+          <Button variant="contained" fullWidth>
+            목록으로
+          </Button>
+        </Link>
       </BtnForm>
     </BoardDetailForm>
   );
