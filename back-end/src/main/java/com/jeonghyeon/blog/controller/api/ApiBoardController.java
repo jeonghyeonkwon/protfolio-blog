@@ -1,5 +1,6 @@
 package com.jeonghyeon.blog.controller.api;
 
+import com.jeonghyeon.blog.dto.BoardDetailResponse;
 import com.jeonghyeon.blog.dto.BoardRequest;
 import com.jeonghyeon.blog.exhandler.CustomValidationException;
 import com.jeonghyeon.blog.exhandler.ValidationExceptionDto;
@@ -19,17 +20,17 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/board")
 @Slf4j
 public class ApiBoardController {
     private final BoardService boardService;
 
-    @GetMapping("/")
+    @GetMapping({"","/"})
     public ResponseEntity boardList(){
         return new ResponseEntity("테스트",HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping({"","/"})
     public ResponseEntity writeBoard(@RequestBody @Valid BoardRequest dto, BindingResult result){
         Optional<String> opUserId = SecurityUtil.getCurrnetAccountId();
         if(!opUserId.isPresent()) throw new IllegalStateException("잘못된 요청입니다. 로그인 후 이용해 주세요");
@@ -38,7 +39,14 @@ public class ApiBoardController {
             ValidationExceptionDto errorList = new ValidationExceptionDto(fieldErrors);
             throw new CustomValidationException("검증 오류",errorList);
         }
-        boardService.writeBoard(opUserId.get(),dto);
-        return new ResponseEntity(HttpStatus.CREATED);
+        String uuid = boardService.writeBoard(opUserId.get(), dto);
+        return new ResponseEntity(uuid,HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{boardUUID}")
+    public ResponseEntity boardDetail(@PathVariable String boardUUID){
+
+        BoardDetailResponse boardDetailResponse = boardService.boardDetail(boardUUID);
+        return new ResponseEntity(boardDetailResponse,HttpStatus.OK);
     }
 }

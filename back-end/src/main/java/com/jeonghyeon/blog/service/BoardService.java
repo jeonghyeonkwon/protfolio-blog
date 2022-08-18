@@ -1,5 +1,6 @@
 package com.jeonghyeon.blog.service;
 
+import com.jeonghyeon.blog.dto.BoardDetailResponse;
 import com.jeonghyeon.blog.dto.BoardRequest;
 import com.jeonghyeon.blog.entity.Account;
 import com.jeonghyeon.blog.entity.Board;
@@ -30,5 +31,13 @@ public class BoardService {
     }
 
 
-    
+    public BoardDetailResponse boardDetail(String boardUUID) {
+        boardRepository.updateView(boardUUID);
+        Optional<BoardDetailResponse> opBoardDetailResponse = boardRepository.boardDetailResponseByUUID(boardUUID);
+        if(!opBoardDetailResponse.isPresent()){
+            throw new IllegalStateException("해당 게시글은 존재하지 않습니다.");
+        }
+        BoardDetailResponse boardDetailResponse = opBoardDetailResponse.get();
+        return boardDetailResponse;
+    }
 }
