@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -12,9 +12,13 @@ import {
   Button,
 } from "@mui/material";
 import styled from "styled-components";
-
+import QueryString from "qs";
+import { useDispatch, useSelector } from "react-redux";
+import { boardList } from "../lib/api/board";
+import { fetchBoard, initialize } from "../modules/board";
 const BoardContainerForm = styled.div`
   width: 80%;
+  height: 700px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,48 +59,6 @@ const PaginationForm = styled.div`
   align-items: center;
   justify-content: center;
 `;
-function createData(no, title, writer, createDate, views) {
-  return { no, title, writer, createDate, views };
-}
-
-const rows = [
-  createData(1, "제목 1 입니다.. 자세한 내용은", "admin", "2022.08.14", 2004),
-  createData(
-    23451,
-    "제목 1 입니다.. 자세한 내용은",
-    "admin",
-    "2022.08.14",
-    2004
-  ),
-  createData(
-    11235,
-    "제목 1 입니다.. 자세한 내용은",
-    "admin",
-    "2022.08.14",
-    2004
-  ),
-  createData(
-    18865,
-    "제목 1 입니다.. 자세한 내용은",
-    "admin",
-    "2022.08.14",
-    2004
-  ),
-  createData(
-    1123451,
-    "제목 1 입니다.. 자세한 내용은",
-    "admin",
-    "2022.08.14",
-    2004
-  ),
-  createData(
-    11255,
-    "제목 1 입니다.. 자세한 내용은",
-    "admin",
-    "2022.08.14",
-    2004
-  ),
-];
 
 const columns = [
   { id: "no", label: "No.", width: "10%", align: "left" },
@@ -106,6 +68,43 @@ const columns = [
   { id: "views", label: "조회수", width: "10%", align: "left" },
 ];
 function BoardContainer(props) {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const search = QueryString.parse(location.search, {
+    ignoreQueryPrefix: true,
+  });
+  useEffect(() => {
+    dispatch(initialize());
+    return () => dispatch(initialize());
+  }, []);
+  useEffect(() => {
+    dispatch(fetchBoard(search.page));
+  }, [search.page]);
+
+  const {
+    isFirst,
+    isList,
+    currentPage,
+    totalPage,
+    totalElement,
+    startBlockPage,
+    endBlockPage,
+    dataList,
+  } = useSelector(({ board }) => ({
+    isFirst: board.boardList.isFirst,
+    isLast: board.boardList.isLast,
+    currentPage: board.boardList.currentPage,
+    totalPage: board.boardList.totalPage,
+    totalElement: board.boardList.totalElement,
+    startBlockPage: board.boardList.totalBlockPage,
+    endBlockPage: board.boardList.endBlockPage,
+    dataList: board.boardList.dataList,
+  }));
+  const onClickFetch = (event, page) => {
+    history.push(`/board?page=${page}`);
+  };
+
   return (
     <BoardContainerForm>
       <BoardTitle>
@@ -130,13 +129,13 @@ function BoardContainer(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.no}>
+            {dataList.map((row) => (
+              <TableRow key={row.id}>
                 <TableCell component="th" scope="row">
-                  {row.no}
+                  {row.id}
                 </TableCell>
                 <TableCell align="left">
-                  <Link to={row.id}>{row.title}</Link>
+                  <Link to={`board/detail/${row.uuid}`}>{row.title}</Link>
                 </TableCell>
                 <TableCell align="center">{row.writer}</TableCell>
                 <TableCell align="left">{row.createDate}</TableCell>
@@ -148,10 +147,14 @@ function BoardContainer(props) {
       </TableContainer>
       <PaginationForm>
         <Pagination
-          count={10}
           size="large"
           variant="outlined"
           color="primary"
+          count={totalPage}
+          hidePrevButton={isFirst}
+          hideNextButton={isList}
+          page={currentPage}
+          onChange={onClickFetch}
         />
       </PaginationForm>
     </BoardContainerForm>
