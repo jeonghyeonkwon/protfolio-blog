@@ -1,13 +1,19 @@
 package com.jeonghyeon.blog.controller.api;
 
 import com.jeonghyeon.blog.dto.BoardDetailResponse;
+import com.jeonghyeon.blog.dto.BoardListResponse;
 import com.jeonghyeon.blog.dto.BoardRequest;
+import com.jeonghyeon.blog.dto.PageListResponse;
 import com.jeonghyeon.blog.exhandler.CustomValidationException;
 import com.jeonghyeon.blog.exhandler.ValidationExceptionDto;
 import com.jeonghyeon.blog.security.util.SecurityUtil;
 import com.jeonghyeon.blog.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,8 +32,11 @@ public class ApiBoardController {
     private final BoardService boardService;
 
     @GetMapping({"","/"})
-    public ResponseEntity boardList(){
-        return new ResponseEntity("테스트",HttpStatus.OK);
+    public ResponseEntity boardList(
+            @PageableDefault(size=10, page = 1, sort = "id",direction = Sort.Direction.DESC)Pageable pageable
+            ){
+        PageListResponse pages = boardService.pageList(pageable);
+        return new ResponseEntity(pages,HttpStatus.OK);
     }
 
     @PostMapping({"","/"})
@@ -49,4 +58,6 @@ public class ApiBoardController {
         BoardDetailResponse boardDetailResponse = boardService.boardDetail(boardUUID);
         return new ResponseEntity(boardDetailResponse,HttpStatus.OK);
     }
+
+
 }

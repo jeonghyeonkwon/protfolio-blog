@@ -1,12 +1,16 @@
 package com.jeonghyeon.blog.service;
 
 import com.jeonghyeon.blog.dto.BoardDetailResponse;
+import com.jeonghyeon.blog.dto.BoardListResponse;
 import com.jeonghyeon.blog.dto.BoardRequest;
+import com.jeonghyeon.blog.dto.PageListResponse;
 import com.jeonghyeon.blog.entity.Account;
 import com.jeonghyeon.blog.entity.Board;
 import com.jeonghyeon.blog.repository.AccountRepository;
 import com.jeonghyeon.blog.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +35,7 @@ public class BoardService {
     }
 
 
+    @Transactional
     public BoardDetailResponse boardDetail(String boardUUID) {
         boardRepository.updateView(boardUUID);
         Optional<BoardDetailResponse> opBoardDetailResponse = boardRepository.boardDetailResponseByUUID(boardUUID);
@@ -39,5 +44,20 @@ public class BoardService {
         }
         BoardDetailResponse boardDetailResponse = opBoardDetailResponse.get();
         return boardDetailResponse;
+    }
+
+
+    public PageListResponse pageList(Pageable pageable) {
+
+        Page<BoardListResponse> page = boardRepository.boardList(pageable);
+        PageListResponse<BoardListResponse> pages = new PageListResponse<>(
+                page.isFirst(),
+                page.isLast(),
+                page.getNumber(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                page.getContent()
+        );
+        return pages;
     }
 }

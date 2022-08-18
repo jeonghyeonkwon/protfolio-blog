@@ -1,14 +1,21 @@
 package com.jeonghyeon.blog.repository.querydsl;
 
 import com.jeonghyeon.blog.dto.BoardDetailResponse;
+import com.jeonghyeon.blog.dto.BoardListResponse;
 import com.jeonghyeon.blog.entity.QAccount;
 import com.jeonghyeon.blog.entity.QBoard;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.data.web.PageableDefault;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.jeonghyeon.blog.entity.QAccount.account;
@@ -53,5 +60,38 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .where(board.uuid.eq(uuid))
                 .set(board.views, board.views.add(1))
                 .execute();
+    }
+
+//    public BoardListResponse(Long id,
+//                             String uuid,
+//                             String title,
+//                             String writer,
+//                             LocalDateTime createDate,
+//                             Long views){
+
+        @Override
+    public Page<BoardListResponse> boardList(Pageable pageable) {
+            List<BoardListResponse> content = jpaQueryFactory
+                    .select(
+                            Projections.constructor(
+                                    BoardListResponse.class,
+                                    board.id,
+                                    board.uuid,
+                                    board.title,
+                                    account.userId,
+                                    board.createdDate,
+                                    board.views
+                            )
+                    )
+                    .from(board)
+                    .innerJoin(board.account, account)
+                    .offset(pageable.getOffset() )
+                    .limit(pageable.getPageSize())
+                    .orderBy(board.id.desc())
+                    .fetch();
+
+            JPAQuery<Long> countQuery = jpaQueryFactory.select(board.count()).from(board);
+            return PageableExecutionUtils.getPage(content,pageable,()->countQuery.fetchOne());
+
     }
 }
