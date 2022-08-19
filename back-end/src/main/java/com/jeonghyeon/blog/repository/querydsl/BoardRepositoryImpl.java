@@ -2,8 +2,7 @@ package com.jeonghyeon.blog.repository.querydsl;
 
 import com.jeonghyeon.blog.dto.BoardDetailResponse;
 import com.jeonghyeon.blog.dto.BoardListResponse;
-import com.jeonghyeon.blog.entity.QAccount;
-import com.jeonghyeon.blog.entity.QBoard;
+import com.jeonghyeon.blog.entity.*;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -94,4 +93,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
             return PageableExecutionUtils.getPage(content,pageable,()->countQuery.fetchOne());
 
     }
+
+
+
 }

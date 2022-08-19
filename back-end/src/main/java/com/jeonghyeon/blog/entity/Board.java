@@ -39,7 +39,8 @@ public class Board extends BaseTimeEntity{
         account.getBoardList().add(this);
     }
 
-    public void updateViews(){
-        this.views += 1;
+    public void mappingRemove(){
+        this.account.getBoardList().remove(this);
+        this.account = null;
     }
 }

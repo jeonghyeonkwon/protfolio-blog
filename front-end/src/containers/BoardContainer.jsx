@@ -109,10 +109,7 @@ function BoardContainer(props) {
     <BoardContainerForm>
       <BoardTitle>
         <h1>게시판</h1>
-        <em>
-          스프링 배치를 이용하여 다음날로 넘어갈 시 admin을 제외한 모든 게시글은
-          삭제됩니다.
-        </em>
+        <em>다음날로 넘어갈 시 admin을 제외한 모든 게시글은 삭제됩니다.</em>
       </BoardTitle>
       <BoardWriteBtn>
         <Link to="/board/write">

@@ -56,6 +56,7 @@ const initialState = {
     writer: "",
     views: 0,
     content: "",
+    error: "",
   },
   write: {
     title: "",
@@ -95,7 +96,9 @@ export default handleActions(
         draft.detail.content = success.content;
       }),
     [DETAIL_FAILURE]: (state, { payload: error }) =>
-      produce(state, (draft) => {}),
+      produce(state, (draft) => {
+        draft.detail.error = "에러가 발생했습니다. 잠시후 다시 시도해 주세요";
+      }),
     [WRITE_SUCCESS]: (state, { payload: success }) =>
       produce(state, (draft) => {
         draft.write.success = success;

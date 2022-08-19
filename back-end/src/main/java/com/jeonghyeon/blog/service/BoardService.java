@@ -5,6 +5,7 @@ import com.jeonghyeon.blog.dto.BoardListResponse;
 import com.jeonghyeon.blog.dto.BoardRequest;
 import com.jeonghyeon.blog.dto.PageListResponse;
 import com.jeonghyeon.blog.entity.Account;
+import com.jeonghyeon.blog.entity.AccountRole;
 import com.jeonghyeon.blog.entity.Board;
 import com.jeonghyeon.blog.repository.AccountRepository;
 import com.jeonghyeon.blog.repository.BoardRepository;
@@ -14,8 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +62,12 @@ public class BoardService {
                 page.getContent()
         );
         return pages;
+    }
+    @Transactional
+    public void removeBoard() {
+        List<Board> board = boardRepository.findBoardRemove(AccountRole.BASIC);
+        board.stream().forEach((data)->data.mappingRemove());
+        boardRepository.deleteAll(board);
+
     }
 }
