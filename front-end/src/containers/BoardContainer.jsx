@@ -79,7 +79,11 @@ function BoardContainer(props) {
     return () => dispatch(initialize());
   }, []);
   useEffect(() => {
-    dispatch(fetchBoard(search.page));
+    if (search.page !== undefined) {
+      dispatch(fetchBoard(search.page));
+    } else {
+      dispatch(fetchBoard(1));
+    }
   }, [search.page]);
 
   const {
