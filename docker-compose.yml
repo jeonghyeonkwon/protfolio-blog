@@ -1,0 +1,7 @@
+version: "3"
+services:
+  blog-front:
+    image: givejeong2468/blog-front
+    ports:
+      - "3000:3000"
+    restart: always
